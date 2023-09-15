@@ -12,6 +12,9 @@ export abstract class Shape {
   origin: Vector2;
   parent: Shape;
   children: Shape[];
+  targetRotation: number;
+  fillColor: string;
+
   constructor(position: Vector2, parent?: Shape) {
     this.position = position;
     this.rotation = 0;
@@ -19,17 +22,23 @@ export abstract class Shape {
     this.vertices = [];
     this.origin = new Vector2(1, 1);
     this.parent = parent;
+    this.targetRotation = 0;
   }
 
+  abstract update(): void;
   abstract draw(ctx: CanvasRenderingContext2D): void;
 
+  setOrigin(x: number, y: number) {
+    this.origin.set(x, y);
+    return this;
+  }
   translate(translation: Vector2) {
     this.position.x += translation.x;
     this.position.y += translation.y;
   }
 
   rotate(angle: number) {
-    this.rotation = lerp(this.rotation, angle, 0.01);
+    this.targetRotation = angle - Math.PI / 2;
     return this;
   }
 }
